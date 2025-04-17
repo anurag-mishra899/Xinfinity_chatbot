@@ -6,7 +6,7 @@ from langchain_community.utilities import SQLDatabase
 from langchain_openai import ChatOpenAI
 llm = ChatOpenAI(model="gpt-4.1-nano-2025-04-14")
 
-#DB = SQLDatabase.from_uri("sqlite:///<PATH_TO_XFINITY_AGENT.DB>")
+DB = SQLDatabase.from_uri("sqlite:///<PATH_TO_XFINITY_AGENT.DB>")
 
 
 def set_up_sql_agent(llm=llm):

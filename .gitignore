@@ -45,7 +45,14 @@ nodeLanguageServer/**
 nodeLanguageServer.*/**
 dist/**
 
-# 
+NBs/mock_data/** 
+NBs/pdfs/**
+NBs/vector_store_index/*
+
+checkpoints.db
+checkpoints.db-shm
+checkpoints.db-wal
+xinfinity_agent.db
 
 .env
 poetry.lock

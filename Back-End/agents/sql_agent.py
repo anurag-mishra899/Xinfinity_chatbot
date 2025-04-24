@@ -1,5 +1,6 @@
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from langchain import hub
+from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, PromptTemplate
 
 from langgraph.prebuilt import create_react_agent
 
@@ -22,10 +23,11 @@ def get_custom_sql_prompt(dialect="SQLite", top_k=10):
     """
     Loads and customizes the SQL agent system prompt.
     """
-    prompt_template = hub.pull("langchain-ai/sql-agent-system-prompt")
+    # prompt_template = hub.pull("langchain-ai/sql-agent-system-prompt")
+    
 
     # Set your custom system prompt
-    prompt_template.messages[0].prompt.template = """
+    system_prompt = """
         You are an intelligent assistant helping users explore a customer billing system.
         Given an input question, create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.
         Unless the user specifies a specific number of examples they wish to obtain, always limit your query to at most {top_k} results.
@@ -51,6 +53,7 @@ def get_custom_sql_prompt(dialect="SQLite", top_k=10):
         - billing_table needs customer_id + service_id (+ optional billing_date, status, plan_name).
 
         When ready, construct a SQL-like query or structured representation to fetch the data."""
+    prompt_template= ChatPromptTemplate(messages=[SystemMessagePromptTemplate(prompt=PromptTemplate(input_variables=['dialect', 'top_k'], input_types={}, partial_variables={},template=system_prompt), additional_kwargs={})])
 
     return prompt_template.format(dialect=dialect, top_k=top_k)
 

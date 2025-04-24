@@ -2,12 +2,12 @@ from langgraph_supervisor import create_supervisor
 from .sql_agent import get_sql_tools, get_custom_sql_prompt,create_sql_agent
 from .rag_agent import create_rag_agent
 from langchain_community.utilities import SQLDatabase
+from langgraph.checkpoint.memory import MemorySaver
+
 
 from langchain_openai import ChatOpenAI
 llm = ChatOpenAI(model="gpt-4.1-nano-2025-04-14")
-
 DB = SQLDatabase.from_uri("sqlite:///<PATH_TO_XFINITY_AGENT.DB>")
-
 
 def set_up_sql_agent(llm=llm):
     tools = get_sql_tools( llm=llm,DB=DB)
@@ -22,13 +22,13 @@ def set_up_rag_agent(llm=llm):
 
 
 def create_workflow():
-    sql_agent=set_up_sql_agent(llm=llm)
-    rag_agent=set_up_rag_agent(llm=llm)
-
+    sql_agent = set_up_sql_agent(llm=llm)
+    rag_agent = set_up_rag_agent(llm=llm)
+    memory = MemorySaver()
     workflow = create_supervisor(
-        agents=[sql_agent, rag_agent],
-        model=llm,
-        prompt=(
+        agents = [sql_agent, rag_agent],
+        model = llm,
+        prompt = (
     
             "Role: You are an Xfinity customer support team supervisor, managing 2 kinds of tasks : 1. a customer billing sql analysis as well as a math expert. "
             "2. Answering questions related to Xfinitie's policy and guidelines. "
@@ -39,5 +39,5 @@ def create_workflow():
         ),
         supervisor_name="Xfinity",
     )
-    app = workflow.compile(name="XfinityTest")
+    app = workflow.compile(name="XfinityTest", checkpointer=memory)
     return app

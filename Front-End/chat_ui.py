@@ -8,8 +8,8 @@ def generate_uuid() -> str:
 
 def make_api_call(prompt: str) -> dict:
     """Calls the API and returns the response as a dictionary."""
-    
-    API_URL = "<API__ENDPOINT>api/v1/generate-stream/"  # Replace with your actual API endpoint
+    #API_URL = "<API__ENDPOINT>api/v1/generate-stream/"# Replace with your actual API endpoint
+    API_URL = "http://localhost:8000/api/v1/generate-stream/"
     thread_id = st.session_state.thread_id
 
     try:
